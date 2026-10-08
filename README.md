@@ -47,12 +47,12 @@ Note: The repository implementation and data lifetime are part of the `ClassLibr
 
 ## Project layout (key files)
 
-- `MunicipalityApp/Program.cs` â€” application entry point.
-- `MunicipalityApp/MainMenu.*` â€” main navigation form and designer.
-- `MunicipalityApp/IssueReportingForm.*` â€” form to create and submit new issues.
-- `MunicipalityApp/ViewReportsForm.*` â€” owner-drawn list for browsing saved issues.
-- `ClassLibrary/Issue.cs` â€” `Issue` model.
-- `ClassLibrary/Repository.cs` â€” generic repository abstraction used by the app.
+- `MunicipalityApp/Program.cs` — application entry point.
+- `MunicipalityApp/MainMenu.*` — main navigation form and designer.
+- `MunicipalityApp/IssueReportingForm.*` — form to create and submit new issues.
+- `MunicipalityApp/ViewReportsForm.*` — owner-drawn list for browsing saved issues.
+- `ClassLibrary/Issue.cs` — `Issue` model.
+- `ClassLibrary/Repository.cs` — generic repository abstraction used by the app.
 
 ## Coding standards
 
