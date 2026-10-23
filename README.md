@@ -1,64 +1,46 @@
-# Municipality App
+# Municipal Services Application ‚Äî Service Request Status implementation
 
-A small WinForms desktop application for reporting and viewing municipal issues. The application is implemented in C# targeting .NET 8 and designed to be opened and developed in Visual Studio 2022.
+## Files included
 
-## Overview
+- `Data Structures/ServiceRequestManager.cs` ‚Äî coordinates request records, search indexes, sample data, priority ordering and graph analysis.
+- `Services/ServiceRequestStructures.cs` ‚Äî basic n-ary tree, binary tree node/traversal, binary search tree, AVL tree, red-black tree, min-heap, weighted graph, BFS, DFS and Kruskal minimum spanning forest.
+- `ViewServiceRequestsWindow.cs` ‚Äî form event handlers, tracking, filters, progress history and analysis actions.
+- `ViewServiceRequestsWindow.Designer.cs` ‚Äî Windows Forms UI using an orange/brown palette.
 
-MunicipalityApp allows users to create issue reports (category, location, description and optional file attachment) and view previously submitted reports in a styled, owner-drawn list. The project demonstrates a simple repository pattern for storing `Issue` objects and a compact WinForms UI.
+## Add to the existing Visual Studio solution
 
-## Features
+1. Keep your existing `ClassLibrary.ServiceRequest` model. It must contain `RequestId`, `Category`, `Location`, `Priority`, `Status`, `Description`, `SubmittedDate`, and `List<string> History`.
+2. Replace the empty `ServiceRequestManager.cs` and `ServiceRequestStructures.cs` files with the supplied files. Ensure the namespaces match the folders/project names.
+3. Replace the contents of `ViewServiceRequestsWindow.cs` and `ViewServiceRequestsWindow.Designer.cs` with the supplied versions. Keep the files nested/paired as they are in your screenshot.
+4. Ensure the `MunicipalityApp` Windows Forms project references the `ClassLibrary` project.
+5. Build the solution. The UI uses `TextBox.PlaceholderText`, available in modern Windows Forms (.NET 6+). If your project targets .NET Framework, remove those `PlaceholderText` assignments.
 
-	- Create and submit issue reports via `IssueReportingForm`.
-- View existing reports in `ViewReportsForm` using an owner-drawn `ListBox` with multi-line cards.
-- Simple `Repository<T>` abstraction for storing and retrieving `Issue` objects.
-- Attachment support (file path stored on the `Issue`).
+## Open the form from MainMenu
 
-## Prerequisites
+Add `using MunicipalityApp.Data_Structures;` only if you want to share a manager instance. The simplest menu click handler is:
 
-- Visual Studio 2022 (recommended) or later
-- .NET 8 SDK
-- Windows OS for running WinForms applications
+```csharp
+private void btnServiceRequestStatus_Click(object sender, EventArgs e)
+{
+    using var window = new ViewServiceRequestsWindow();
+    window.ShowDialog(this);
+}
+```
 
-The solution targets C# language version 12 and .NET 8.
+Connect the handler to the existing ‚ÄúService Request Status‚Äù button. If your button has a different name, use its name in the event handler. The default constructor loads sample requests so the screen is immediately demonstrable.
 
-## Build and run
+## Demonstrating the data structures
 
-Using Visual Studio 2022
+- Basic tree: groups category names below an `All Categories` root.
+- Binary tree: a balanced binary tree built from sorted request IDs.
+- Binary search tree: indexes request IDs and returns them in sorted in-order traversal.
+- AVL tree: self-balancing request-ID index.
+- Red-black tree: self-balancing request-ID index.
+- Min-heap: orders requests by Urgent, High, Medium, Low, then submission date.
+- Graph: connects requests sharing a category or location; weight 1 means both attributes match, weight 2 means one matches.
+- BFS and DFS: traverse the related-request graph from a chosen request ID.
+- Kruskal MST: returns a minimum spanning forest, because the related-request graph may be disconnected.
 
-1. Open `MunicipalityApp.sln` in Visual Studio 2022.
-2. Let NuGet restore packages if prompted.
-3. Set `MunicipalityApp` as the startup project.
-4. Press F5 (Debug) or Ctrl+F5 (Run without debugging).
+## Important limitations / production considerations
 
-Using the .NET CLI
-
-1. Open a terminal in the repository root (where the solution file is located).
-2. Run `dotnet restore`.
-3. Run `dotnet build`.
-4. Run the app with `dotnet run --project MunicipalityApp\\MunicipalityApp.csproj`.
-
-## Usage
-
-- Main menu: navigate between reporting and viewing functionality.
-- Issue reporting: fill in category, location, description and optionally attach a file. Submitting creates an `Issue` stored in the application's repository instance.
-- View reports: open the reports viewer to see submitted issues displayed as cards. Each card shows category, location, truncated multi-line description, and attachment filename (if present).
-
-Note: The repository implementation and data lifetime are part of the `ClassLibrary` project. Depending on the `Repository<T>` implementation, data may be stored in-memory for the running session or persisted.
-
-## Project layout (key files)
-
-- `MunicipalityApp/Program.cs` ó application entry point.
-- `MunicipalityApp/MainMenu.*` ó main navigation form and designer.
-- `MunicipalityApp/IssueReportingForm.*` ó form to create and submit new issues.
-- `MunicipalityApp/ViewReportsForm.*` ó owner-drawn list for browsing saved issues.
-- `ClassLibrary/Issue.cs` ó `Issue` model.
-- `ClassLibrary/Repository.cs` ó generic repository abstraction used by the app.
-
-## Coding standards
-
-This repository includes an `.editorconfig` and `CONTRIBUTING.md` at the root. Follow those files for formatting, naming, and contribution guidelines. Configure Visual Studio settings if you rely on editor formats not enforced by `.editorconfig`.
-
-Recommended Visual Studio settings to check:
-- Ensure code formatting follows `.editorconfig`.
-- Confirm target framework (.NET 8) for projects.
-
+This implementation intentionally stores requests in memory and includes six sample records. Records and status changes are lost when the application closes. For a production application, persist the requests and history in SQL Server using Entity Framework Core, validate status transitions, and restrict status updates to authorised municipal staff. The graph is rebuilt after changes, which is suitable for an assignment demonstration but could be optimised for large datasets.
