@@ -32,7 +32,8 @@ namespace MunicipalityApp
 
         private void btnRequestService_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Feature Coming soon");
+            ViewServiceRequestsWindow viewServiceRequestsWindow = new ViewServiceRequestsWindow();
+            viewServiceRequestsWindow.Show();
         }
     }
 }
