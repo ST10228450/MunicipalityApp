@@ -26,12 +26,14 @@ namespace MunicipalityApp
 
         private void btnViewAnnouncements_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Feature coming soon");
+            ViewAnnouncementsWindow viewAnnouncementsWindow = new ViewAnnouncementsWindow();
+            viewAnnouncementsWindow.Show();
         }
 
         private void btnRequestService_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Feature Coming soon");
+            ViewServiceRequestsWindow viewServiceRequestsWindow = new ViewServiceRequestsWindow();
+            viewServiceRequestsWindow.Show();
         }
     }
 }
